@@ -3,6 +3,7 @@ var inimigos = 0; //numero de inimigos que passaram
 var pontos   = 0; //numero de inimigos mortos
 var energia  = 3; //vitalidade
 var heroi    = "debug"; //nome do heroi
+var pulando  = false; //se o jogador esta pulando, bug fix
 
 function mudaAparencia(estado) //comportamento do heroi
 {
@@ -48,6 +49,8 @@ function jumping(keyboard)
         pressed = keyboard;
         mudaAparencia("pulando");
         playSound('Pulo.wav');
+        pulando = true;
+        setTimeout(function() { pulando = false; }, 90);
     }
 }
 
@@ -91,21 +94,24 @@ function run() //executa variaveis do jogo
     }
     if(!paused && !over)//se esta pausado, não executa
     {
-        var offset = hero.offsetTop;
-        var pos = tempoQueda * gravidade / 2;
-        pos += offset;
-        if(pos > maxPos)
+        if(!pulando)
         {
-            hero.style.top = maxPos;
-            tempoQueda = 1;
-            jCount = 0;
-            mudaAparencia("normal");
-        }
-        else
-        {
-            mudaAparencia("caindo");
-            hero.style.top = pos;
-            tempoQueda += 1;
+            var offset = hero.offsetTop;
+            var pos = tempoQueda * gravidade / 2;
+            pos += offset;
+            if(pos > maxPos)
+            {
+                hero.style.top = maxPos;
+                tempoQueda = 1;
+                jCount = 0;
+                mudaAparencia("normal");
+            }
+            else
+            {
+                mudaAparencia("caindo");
+                hero.style.top = pos;
+                tempoQueda += 1;
+            }
         }
         tempo += 1;
 
@@ -128,10 +134,12 @@ function newEnemy()
     if(enCounter/2 == 0)
     { //par
         enemy = document.getElementById('enemyA');
+        if(hasClass(enemy, "vivo")) enemy = document.getElementById('enemyB');
     }
     else
     { //impar
         enemy = document.getElementById('enemyB');
+        if(hasClass(enemy, "vivo")) enemy = document.getElementById('enemyA');
     }
 
     if(!hasClass(enemy, "vivo")) //trata se o inimigo atual esta em jogo

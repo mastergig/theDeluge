@@ -30,7 +30,7 @@ function tecla(evento, objeto)
 
 var minPos     = 75;    //posição teto
 var maxPos     = 400;   //posição chão
-var jump       = 250;   //tamanho do pulo
+var jump       = 150;   //tamanho do pulo
 var jCount     = 0;     //contador de pulos
 var maxJump    = 2;     //numero maximo de pulos
 var gravidade  = 20;    //gravidade(?)
